@@ -34,6 +34,7 @@ export default function RootLayout({
   id="tsparticles"
   init={particlesInit}
   options={{
+    preset: "presetName",
     fullScreen: {
       enable: true,
       zIndex: -1
@@ -66,7 +67,14 @@ export default function RootLayout({
         fill: true
       },
       size: {
-        value: { min: 1, max: 5 }
+        value: { min: 0.5, max: 2 } // Smaller particle size
+      },
+      links: {
+        enable: true,
+        distance: 150,
+        color: "#555",
+        opacity: 0.4,
+        width: 0.5
       }
     },
     interactivity: {
@@ -93,8 +101,7 @@ export default function RootLayout({
     },
     detectRetina: true
   }}
-/>
-          <Navbar />
+/>       <Navbar />
           <main className="min-h-screen bg-background relative">
             <div className="container mx-auto relative z-50">{children}</div>
           </main>
