@@ -1,57 +1,104 @@
-'use client';
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Particles from 'react-tsparticles';
-import { loadFull } from 'tsparticles';
+import { useCallback } from 'react';
+import { loadSlim } from "tsparticles-slim";
+import type { Container, Engine } from "tsparticles-engine";
+const ParticulesLayout = () => {
+  const [theme, setTheme] = useState('light');
 
-export default function ParticlesBackground() {
-  const particlesInit = async (main: any) => {
-    await loadFull(main); // Load the full tsparticles package
-  };
+  useEffect(() => {
+    const currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    setTheme(currentTheme);
+
+    const themeChangeListener = (e: MediaQueryListEvent) => {
+      setTheme(e.matches ? 'dark' : 'light');
+    };
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', themeChangeListener);
+
+    return () => {
+      window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', themeChangeListener);
+    };
+  }, []);
+  const particlesInit = useCallback(async (engine: Engine) => {
+    await loadSlim(engine);
+  }, []);
+  const particleColor = theme === 'light' ? '#777' : '#555';
 
   return (
     <Particles
       id="tsparticles"
       init={particlesInit}
       options={{
-        background: {
-          color: {
-            value: '', // Leave empty to inherit theme background color
-          },
+        preset: "presetName",
+        fullScreen: {
+          enable: true,
+          zIndex: -1
         },
+        fpsLimit: 120,
         particles: {
-          number: {
-            value: 50,
-            density: {
-              enable: true,
-              area: 800,
-            },
-          },
           color: {
-            value: '#00000',
-          },
-          shape: {
-            type: 'circle',
-          },
-          opacity: {
-            value: 0.5,
-            random: true,
-          },
-          size: {
-            value: 5,
-            random: true,
+            value: particleColor
           },
           move: {
+            direction: "bottom",
             enable: true,
-            speed: 2,
-            direction: 'none',
-            random: false,
-            straight: false,
-            outModes: 'out',
+            random: true,
+            speed: 0.5,
+            straight: false
           },
+          number: {
+            density: {
+              enable: true,
+              area: 800
+            },
+            value: 100
+          },
+          opacity: {
+            value: 0.5
+          },
+          shape: {
+            type: "circle",
+            close: true,
+            fill: true
+          },
+          size: {
+            value: { min: 0.5, max: 2 } // Smaller particle size
+          },
+          links: {
+            enable: true,
+            distance: 150,
+            color: particleColor,
+            opacity: 0.4,
+            width: 0.5
+          }
         },
-        detectRetina: true,
+        interactivity: {
+          events: {
+            onHover: {
+              enable: true,
+              mode: "repulse"
+            },
+            onClick: {
+              enable: true,
+              mode: "push"
+            },
+            resize: true
+          },
+          modes: {
+            repulse: {
+              distance: 100,
+              duration: 0.4
+            },
+            push: {
+              quantity: 4
+            }
+          }
+        },
+        detectRetina: true
       }}
     />
   );
-}
+};
+
+export default ParticulesLayout;
