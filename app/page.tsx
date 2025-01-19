@@ -30,10 +30,8 @@ export default function Home() {
   const skills = [
     "Modern JavaScript/TypeScript",
     "React & Next.js",
-    "Node.js & Express",
-    "SQL & NoSQL",
-    "Cloud Services",
-    "System Design"
+    "Supabase",
+    "Django & Django REST Framework",
   ]
 
   useEffect(() => {
@@ -53,15 +51,17 @@ export default function Home() {
         <div className="space-y-8">
           <div className="space-y-4">
             <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-gradient-to-r from-primary to-primary/50 text-transparent bg-clip-text">
-              Full-Stack Engineer
+              Full-Stack Developer
             </h1>
             <h2 className="text-xl text-muted-foreground sm:text-2xl h-8">
               {skills[currentText]}
             </h2>
-            <p className="max-w-[600px] text-muted-foreground">
-              Crafting end-to-end solutions with modern technologies. Specializing in scalable architectures,
-              cloud-native applications, and delivering exceptional user experiences.
-            </p>
+              <p className="max-w-[600px] text-muted-foreground">
+                Crafting end-to-end solutions with modern technologies like React, Next.js, Supabase, and Django REST Framework (DRF). 
+                Specializing in scalable architectures, cloud-native applications, and delivering exceptional user experiences. 
+                Experienced in integrating APIs, optimizing performance, and ensuring security in web applications.
+              </p>
+
           </div>
 
           {/* Tech Stack Badges */}
@@ -69,9 +69,8 @@ export default function Home() {
             <TechBadge>TypeScript</TechBadge>
             <TechBadge>React</TechBadge>
             <TechBadge>Next.js</TechBadge>
-            <TechBadge>Node.js</TechBadge>
-            <TechBadge>PostgreSQL</TechBadge>
-            <TechBadge>AWS</TechBadge>
+            <TechBadge>Docker</TechBadge>
+            <TechBadge>Supabase</TechBadge>
           </div>
 
           {/* CTA Buttons */}
@@ -84,19 +83,19 @@ export default function Home() {
             </Button>
             <div className="flex gap-4">
               <Button variant="outline" size="icon" className="hover:text-primary">
-                <Link href="https://github.com" target="_blank">
+                <Link href="https://github.com/mouaammou" target="_blank">
                   <Github className="h-5 w-5" />
                   <span className="sr-only">GitHub</span>
                 </Link>
               </Button>
               <Button variant="outline" size="icon" className="hover:text-primary">
-                <Link href="https://linkedin.com" target="_blank">
+                <Link href="https://linkedin.com/in/mouad-ouaammou-36a7b8175" target="_blank">
                   <Linkedin className="h-5 w-5" />
                   <span className="sr-only">LinkedIn</span>
                 </Link>
               </Button>
               <Button variant="outline" size="icon" className="hover:text-primary">
-                <Link href="mailto:contact@example.com">
+                <Link href="mailto:mouadamassine@gmail.com">
                   <Mail className="h-5 w-5" />
                   <span className="sr-only">Email</span>
                 </Link>
@@ -115,12 +114,17 @@ export default function Home() {
           <SkillCard 
             icon={Server}
             title="Backend Engineering"
-            description="Designing robust APIs and services using Node.js, Express, and modern architectural patterns"
+            description="Designing robust APIs and services using Django, Django REST Framework (DRF), and Supabase"
           />
           <SkillCard 
             icon={Database}
             title="Database & Infrastructure"
-            description="Managing data with SQL/NoSQL databases and deploying to cloud platforms"
+            description="Managing data with PostgreSQL and deploying to Supabase"
+          />
+          <SkillCard 
+            icon={Code}
+            title="DevOps & Infrastructure"
+            description="Using Docker, Docker Compose, and cloud services to deploy and manage scalable applications"
           />
         </div>
       </div>

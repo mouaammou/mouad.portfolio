@@ -5,11 +5,6 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: { unoptimized: true },
-  // Add this to fix RSC payload fetch error
-  experimental: {
-    appDir: true,
-    serverActions: true
-  }
 };
 
 module.exports = nextConfig;

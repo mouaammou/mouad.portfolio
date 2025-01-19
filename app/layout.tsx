@@ -1,38 +1,40 @@
+"use client";
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/navbar";
 import { Toaster } from "@/components/ui/toaster";
+import { useEffect } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata: Metadata = {
-  title: 'Full-Stack Software Engineer Portfolio',
-  description: 'Full-Stack Developer | Building Scalable and Innovative Solutions',
-  openGraph: {
-    title: 'Full-Stack Software Engineer Portfolio',
-    description: 'Full-Stack Developer | Building Scalable and Innovative Solutions',
-    url: 'https://your-portfolio.com',
-    siteName: 'Full-Stack Portfolio',
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97',
-        width: 1200,
-        height: 630,
-        alt: 'Portfolio Preview',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
-};
-
+//  
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  useEffect(() => {
+    const createSnowflake = () => {
+      const snowflake = document.createElement('div');
+      snowflake.className = 'snowflake';
+      snowflake.style.left = `${Math.random() * 100}vw`;
+      snowflake.style.width = `${Math.random() * 10 + 5}px`;
+      snowflake.style.height = snowflake.style.width;
+      snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`;
+      document.body.appendChild(snowflake);
+
+      setTimeout(() => {
+        snowflake.remove();
+      }, 5000);
+    };
+
+    const interval = setInterval(createSnowflake, 200);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>

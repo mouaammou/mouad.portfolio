@@ -6,10 +6,24 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Search, Clock, ArrowRight } from "lucide-react"
-import Link from "next/link"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Search, Clock, ArrowRight, Calendar, Share2 } from "lucide-react"
 
 const categories = ["All", "React", "Next.js", "Django", "REST APIs", "Freelancing"]
+
+type BlogPost = {
+  id: string
+  title: string
+  excerpt: string
+  fullContent?: string // Make it optional
+  category: string
+  date: string
+  readTime: string
+  imageUrl: string
+  tags: string[]
+  author: string
+  relatedLinks?: { title: string; url: string }[]
+}
 
 const blogPosts = [
   {
@@ -20,7 +34,8 @@ const blogPosts = [
     date: "2024-03-15",
     readTime: "5 min read",
     imageUrl: "https://images.unsplash.com/photo-1555066931-4365d14bab8c",
-    tags: ["Next.js", "SSR", "React", "Performance"]
+    tags: ["Next.js", "SSR", "React", "Performance"],
+    content: "Server-Side Rendering (SSR) in Next.js offers a robust solution for delivering dynamic content with improved performance and SEO. This post delves into the mechanics of SSR, comparing it with Client-Side Rendering (CSR) and Static Site Generation (SSG). We'll discuss how SSR can reduce the time to first byte (TTFB) and enhance user experience by serving fully rendered HTML from the server. Additionally, we'll cover practical examples of implementing SSR in Next.js and best practices to optimize server-rendered applications for scale and reliability."
   },
   {
     id: "2",
@@ -30,7 +45,8 @@ const blogPosts = [
     date: "2024-03-10",
     readTime: "8 min read",
     imageUrl: "https://images.unsplash.com/photo-1516116216624-53e697fedbea",
-    tags: ["Django", "REST APIs", "Python", "Backend"]
+    tags: ["Django", "REST APIs", "Python", "Backend"],
+    content: "REST APIs are the backbone of modern web and mobile applications, and Django REST Framework (DRF) makes building them straightforward and efficient. In this article, we walk through creating a scalable REST API using Django, covering the essential components like serializers, views, and routers. We'll also explore how to handle authentication, permissions, and pagination to make your APIs robust and secure. By the end of this post, you'll have a solid foundation to build and deploy REST APIs with Django in your projects."
   },
   {
     id: "3",
@@ -40,7 +56,8 @@ const blogPosts = [
     date: "2024-03-05",
     readTime: "6 min read",
     imageUrl: "https://images.unsplash.com/photo-1522071820081-009f0129c71c",
-    tags: ["Freelancing", "Career", "Tips"]
+    tags: ["Freelancing", "Career", "Tips"],
+    content: "Starting a freelancing career can be daunting, especially for developers used to structured work environments. This post provides practical advice on how to navigate the transition to freelancing, from building a solid portfolio to finding your first clients. We discuss pricing strategies, time management, and tools that can help streamline your workflow. Whether you're considering freelancing as a side hustle or a full-time career, these tips will help you set the stage for success and growth in the competitive freelancing market."
   },
   {
     id: "4",
@@ -50,13 +67,89 @@ const blogPosts = [
     date: "2024-03-01",
     readTime: "7 min read",
     imageUrl: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97",
-    tags: ["React", "Performance", "JavaScript"]
+    tags: ["React", "Performance", "JavaScript"],
+    content: "Optimizing performance in React applications is crucial for delivering fast and responsive user experiences. This article covers advanced techniques for improving React app performance, including the use of memoization, lazy loading, and code splitting. We also discuss how to profile React components to identify bottlenecks and optimize rendering. By the end of this post, you'll be equipped with the tools and strategies to boost the performance of your React applications, ensuring they run smoothly and efficiently, even under heavy load."
   }
 ]
+
+function BlogPostDialog({ post, open, onOpenChange }) {
+  if (!post) return null
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-3xl h-[80vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-bold">{post.title}</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-6">
+          <img
+            src={post.imageUrl}
+            alt={post.title}
+            className="w-full h-64 object-cover rounded-lg"
+          />
+          
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Badge>{post.category}</Badge>
+            </div>
+            <Button variant="ghost" size="icon">
+              <Share2 className="h-4 w-4" />
+            </Button>
+          </div>
+
+          <div className="prose prose-stone dark:prose-invert max-w-none">
+            <p className="text-lg font-medium text-muted-foreground">
+              {post.excerpt}
+            </p>
+            <div className="mt-4 space-y-4">
+              {post.content ? 
+                post.content.split('\n').map((paragraph, index) => (
+                  <p key={index}>{paragraph.trim()}</p>
+                ))
+                : 
+                <p>{post.excerpt}</p> // Fallback to excerpt if no content
+              }
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="font-semibold">Tags</h3>
+            <div className="flex flex-wrap gap-2">
+              {post.tags.map((tag) => (
+                <Badge key={tag} variant="secondary">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          </div>
+
+          {post.relatedLinks && (
+            <div className="space-y-4">
+              <h3 className="font-semibold">Related Resources</h3>
+              <div className="space-y-2">
+                {post.relatedLinks.map((link) => (
+                  <Button
+                    key={link.title}
+                    variant="link"
+                    className="h-auto p-0 text-primary"
+                  >
+                    {link.title}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}
 
 export default function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState("All")
   const [searchQuery, setSearchQuery] = useState("")
+  const [selectedPost, setSelectedPost] = useState(null)
 
   const filteredPosts = blogPosts.filter(post => {
     const matchesCategory = selectedCategory === "All" || post.category === selectedCategory
@@ -117,7 +210,10 @@ export default function BlogPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <Card className="overflow-hidden h-full hover:shadow-lg transition-shadow">
+              <Card 
+                className="overflow-hidden h-full hover:shadow-lg transition-shadow cursor-pointer"
+                onClick={() => setSelectedPost(post)}
+              >
                 <div className="aspect-video relative overflow-hidden">
                   <img
                     src={post.imageUrl}
@@ -128,15 +224,11 @@ export default function BlogPage() {
                 <CardContent className="p-6 space-y-4">
                   <div className="flex items-center gap-2">
                     <Badge>{post.category}</Badge>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Clock className="h-4 w-4 mr-1" />
-                      {post.readTime}
-                    </div>
                   </div>
 
                   <div>
                     <h3 className="text-xl font-semibold mb-2">{post.title}</h3>
-                    <p className="text-muted-foreground">{post.excerpt}</p>
+                    <p className="text-muted-foreground line-clamp-2">{post.excerpt}</p>
                   </div>
 
                   <div className="flex flex-wrap gap-2">
@@ -146,18 +238,18 @@ export default function BlogPage() {
                       </Badge>
                     ))}
                   </div>
-
-                  <Button variant="ghost" className="w-full" asChild>
-                    <Link href={`/blog/${post.id}`} className="flex items-center justify-center gap-2">
-                      Read More
-                      <ArrowRight className="h-4 w-4" />
-                    </Link>
-                  </Button>
                 </CardContent>
               </Card>
             </motion.div>
           ))}
         </div>
+
+        {/* Blog Post Dialog */}
+        <BlogPostDialog
+          post={selectedPost}
+          open={!!selectedPost}
+          onOpenChange={() => setSelectedPost(null)}
+        />
       </motion.div>
     </div>
   )

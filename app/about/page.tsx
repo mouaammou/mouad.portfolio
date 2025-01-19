@@ -2,8 +2,9 @@
 
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { FileDown } from "lucide-react"
+import { FileDown, Github, Linkedin, Mail } from "lucide-react"
 import { Timeline } from "@/components/timeline"
+import { Card } from "@/components/ui/card"
 
 const skills = [
   { category: "Frontend", items: ["React", "Next.js", "TypeScript", "Tailwind CSS"] },
@@ -30,65 +31,145 @@ const journey = [
   },
 ]
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2
+    }
+  }
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5
+    }
+  }
+}
+
+const skillCardVariants = {
+  hidden: { scale: 0.8, opacity: 0 },
+  visible: {
+    scale: 1,
+    opacity: 1,
+    transition: {
+      duration: 0.5
+    }
+  },
+  hover: {
+    scale: 1.05,
+    transition: {
+      duration: 0.2
+    }
+  }
+}
+
 export default function AboutPage() {
   return (
-    <div className="container py-12">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="space-y-12"
-      >
-        {/* Introduction */}
-        <section className="space-y-4">
-          <h1 className="text-4xl font-bold tracking-tighter">About Me</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl">
-            I'm a passionate full-stack developer with a strong foundation in mathematics and computer science. 
-            My journey in software development has been driven by a desire to create scalable, efficient solutions 
-            that make a real impact.
+    <div className="min-h-screen bg-gradient-to-b from-background to-accent/10">
+      <div className="container py-12 space-y-16">
+        {/* Hero Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center space-y-6"
+        >
+          <h1 className="text-5xl font-bold tracking-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            Mouad Ouaammou
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Full-stack Developer passionate about creating scalable solutions
           </p>
-        </section>
+          <div className="flex justify-center gap-4">
+            <Button variant="ghost" size="icon">
+              <Github className="h-5 w-5" />
+            </Button>
+            <Button variant="ghost" size="icon">
+              <Linkedin className="h-5 w-5" />
+            </Button>
+            <Button variant="ghost" size="icon">
+              <Mail className="h-5 w-5" />
+            </Button>
+          </div>
+        </motion.div>
 
-        {/* Skills */}
-        <section className="space-y-6">
-          <h2 className="text-2xl font-semibold">Skills & Expertise</h2>
+        {/* Skills Section */}
+        <motion.section
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="space-y-8"
+        >
+          <motion.h2 variants={itemVariants} className="text-3xl font-semibold text-center">
+            Skills & Expertise
+          </motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {skills.map((skill) => (
-              <div key={skill.category} className="space-y-2">
-                <h3 className="font-medium text-lg">{skill.category}</h3>
-                <ul className="space-y-1">
-                  {skill.items.map((item) => (
-                    <li key={item} className="text-muted-foreground">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <motion.div
+                key={skill.category}
+                variants={skillCardVariants}
+                whileHover="hover"
+              >
+                <Card className="p-6 h-full bg-background/50 backdrop-blur-sm border-accent/20 hover:border-accent/40 transition-colors">
+                  <h3 className="font-medium text-lg mb-4">{skill.category}</h3>
+                  <ul className="space-y-2">
+                    {skill.items.map((item) => (
+                      <li key={item} className="text-muted-foreground flex items-center">
+                        <span className="w-2 h-2 bg-primary/60 rounded-full mr-2" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+              </motion.div>
             ))}
           </div>
-        </section>
+        </motion.section>
 
         {/* Journey Timeline */}
-        <section className="space-y-6">
-          <h2 className="text-2xl font-semibold">My Journey</h2>
+        <motion.section
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="space-y-8"
+        >
+          <motion.h2 variants={itemVariants} className="text-3xl font-semibold text-center">
+            My Journey
+          </motion.h2>
           <Timeline items={journey} />
-        </section>
+        </motion.section>
 
         {/* Download Section */}
-        <section className="space-y-4">
-          <h2 className="text-2xl font-semibold">Download Resume</h2>
-          <div className="flex gap-4">
-            <Button>
-              <FileDown className="mr-2 h-4 w-4" />
+        <motion.section
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="text-center space-y-6"
+        >
+          <motion.h2 variants={itemVariants} className="text-3xl font-semibold">
+            Download Resume
+          </motion.h2>
+          <motion.div variants={itemVariants} className="flex justify-center gap-4">
+            <Button className="group">
+              <FileDown className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
               Download CV
             </Button>
-            <Button variant="outline">
-              <FileDown className="mr-2 h-4 w-4" />
+            <Button variant="outline" className="group">
+              <FileDown className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
               Download Cover Letter
             </Button>
-          </div>
-        </section>
-      </motion.div>
+          </motion.div>
+        </motion.section>
+      </div>
     </div>
   )
 }
