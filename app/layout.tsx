@@ -1,38 +1,24 @@
-"use client";
+'use client';
+
 import './globals.css';
-import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { ThemeProvider } from "@/components/theme-provider";
-import { Navbar } from "@/components/navbar";
-import { Toaster } from "@/components/ui/toaster";
-import { useEffect } from 'react';
+import { ThemeProvider } from '@/components/theme-provider';
+import { Navbar } from '@/components/navbar';
+import { Toaster } from '@/components/ui/toaster';
+import { useCallback } from 'react';
+import Particles from "react-tsparticles";
+import type { Container, Engine } from "tsparticles-engine";
+import { loadSlim } from "tsparticles-slim";
 
 const inter = Inter({ subsets: ['latin'] });
 
-//  
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  useEffect(() => {
-    const createSnowflake = () => {
-      const snowflake = document.createElement('div');
-      snowflake.className = 'snowflake';
-      snowflake.style.left = `${Math.random() * 100}vw`;
-      snowflake.style.width = `${Math.random() * 10 + 5}px`;
-      snowflake.style.height = snowflake.style.width;
-      snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`;
-      document.body.appendChild(snowflake);
-
-      setTimeout(() => {
-        snowflake.remove();
-      }, 5000);
-    };
-
-    const interval = setInterval(createSnowflake, 200);
-
-    return () => clearInterval(interval);
+  const particlesInit = useCallback(async (engine: Engine) => {
+    await loadSlim(engine);
   }, []);
 
   return (
@@ -44,9 +30,73 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+<Particles
+  id="tsparticles"
+  init={particlesInit}
+  options={{
+    fullScreen: {
+      enable: true,
+      zIndex: -1
+    },
+    fpsLimit: 120,
+    particles: {
+      color: {
+        value: "#555"
+      },
+      move: {
+        direction: "bottom",
+        enable: true,
+        random: true,
+        speed: 0.5,
+        straight: false
+      },
+      number: {
+        density: {
+          enable: true,
+          area: 800
+        },
+        value: 100
+      },
+      opacity: {
+        value: 0.5
+      },
+      shape: {
+        type: "circle",
+        close: true,
+        fill: true
+      },
+      size: {
+        value: { min: 1, max: 5 }
+      }
+    },
+    interactivity: {
+      events: {
+        onHover: {
+          enable: true,
+          mode: "repulse"
+        },
+        onClick: {
+          enable: true,
+          mode: "push"
+        },
+        resize: true
+      },
+      modes: {
+        repulse: {
+          distance: 100,
+          duration: 0.4
+        },
+        push: {
+          quantity: 4
+        }
+      }
+    },
+    detectRetina: true
+  }}
+/>
           <Navbar />
-          <main className="min-h-screen bg-background">
-            <div className="container mx-auto">{children}</div>
+          <main className="min-h-screen bg-background relative">
+            <div className="container mx-auto relative z-50">{children}</div>
           </main>
           <Toaster />
         </ThemeProvider>

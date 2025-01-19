@@ -36,7 +36,6 @@ const milestones = [
     achievements: [
       "Built HTTP/1.1 web server from scratch in C++",
       "Implemented Unix shell with job control",
-      "Created IRC server with concurrent connections"
     ]
   },
   {
@@ -47,7 +46,6 @@ const milestones = [
     achievements: [
       "Focus on algorithms and data structures",
       "Research in computational mathematics",
-      "Academic excellence award recipient"
     ]
   }
 ]

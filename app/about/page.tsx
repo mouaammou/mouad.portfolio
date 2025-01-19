@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { FileDown, Github, Linkedin, Mail } from "lucide-react"
 import { Timeline } from "@/components/timeline"
 import { Card } from "@/components/ui/card"
+import Link from "next/link"
 
 const skills = [
   { category: "Frontend", items: ["React", "Next.js", "TypeScript", "Tailwind CSS"] },
@@ -73,32 +74,6 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-accent/10">
       <div className="container py-12 space-y-16">
-        {/* Hero Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center space-y-6"
-        >
-          <h1 className="text-5xl font-bold tracking-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Mouad Ouaammou
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Full-stack Developer passionate about creating scalable solutions
-          </p>
-          <div className="flex justify-center gap-4">
-            <Button variant="ghost" size="icon">
-              <Github className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon">
-              <Linkedin className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon">
-              <Mail className="h-5 w-5" />
-            </Button>
-          </div>
-        </motion.div>
-
         {/* Skills Section */}
         <motion.section
           variants={containerVariants}
@@ -161,11 +136,9 @@ export default function AboutPage() {
           <motion.div variants={itemVariants} className="flex justify-center gap-4">
             <Button className="group">
               <FileDown className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
-              Download CV
-            </Button>
-            <Button variant="outline" className="group">
-              <FileDown className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
-              Download Cover Letter
+              <Link href="https://drive.google.com/file/d/1FmPx5Hna_dDVz2naWA-ZCSVTnSVBG4X1/view" target="blank">
+                Download CV
+              </Link>
             </Button>
           </motion.div>
         </motion.section>
