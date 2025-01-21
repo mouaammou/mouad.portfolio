@@ -6,14 +6,25 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { ArrowRight, Github, Linkedin, Mail, Code, Database, Server } from "lucide-react"
+import { ReactNode } from "react";
+import { FC } from "react";
 
-const TechBadge = ({ children }) => (
+interface TechBadgeProps {
+  children: ReactNode;
+}
+const TechBadge = ({ children }: TechBadgeProps) => (
   <Badge variant="secondary" className="mr-2 mb-2 text-sm">
     {children}
   </Badge>
-)
+);
 
-const SkillCard = ({ icon: Icon, title, description }) => (
+interface SkillCardProps {
+  icon: FC<{ className?: string }>;
+  title: string;
+  description: string;
+}
+
+const SkillCard = ({ icon: Icon, title, description }: SkillCardProps) => (
   <Card className="border-none shadow-none bg-secondary/50">
     <CardContent className="p-6 space-y-2">
       <Icon className="h-6 w-6 mb-2 text-primary" />
@@ -21,7 +32,7 @@ const SkillCard = ({ icon: Icon, title, description }) => (
       <p className="text-sm text-muted-foreground">{description}</p>
     </CardContent>
   </Card>
-)
+);
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)

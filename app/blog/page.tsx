@@ -7,25 +7,25 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Search, Clock, ArrowRight, Calendar, Share2 } from "lucide-react"
+import { Search, Share2 } from "lucide-react"
 
-const categories = ["All", "React", "Next.js", "Django", "REST APIs", "Freelancing"]
+const categories = ["All", "React", "Next.js", "Django", "REST APIs", "Freelancing"] as const
+type Category = (typeof categories)[number]
 
-type BlogPost = {
+interface BlogPost {
   id: string
   title: string
   excerpt: string
-  fullContent?: string // Make it optional
-  category: string
+  content?: string
+  category: Category
   date: string
   readTime: string
   imageUrl: string
   tags: string[]
-  author: string
   relatedLinks?: { title: string; url: string }[]
 }
 
-const blogPosts = [
+const blogPosts: BlogPost[] = [
   {
     id: "1",
     title: "Understanding SSR in Next.js",
@@ -72,7 +72,13 @@ const blogPosts = [
   }
 ]
 
-function BlogPostDialog({ post, open, onOpenChange }) {
+interface BlogPostDialogProps {
+  post: BlogPost | null
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
+
+function BlogPostDialog({ post, open, onOpenChange }: BlogPostDialogProps) {
   if (!post) return null
 
   return (
@@ -102,12 +108,12 @@ function BlogPostDialog({ post, open, onOpenChange }) {
               {post.excerpt}
             </p>
             <div className="mt-4 space-y-4">
-              {post.content ? 
+              {post.content ?
                 post.content.split('\n').map((paragraph, index) => (
                   <p key={index}>{paragraph.trim()}</p>
                 ))
                 : 
-                <p>{post.excerpt}</p> // Fallback to excerpt if no content
+                <p>{post.excerpt}</p>
               }
             </div>
           </div>
@@ -139,7 +145,6 @@ function BlogPostDialog({ post, open, onOpenChange }) {
               </div>
             </div>
           )}
-
         </div>
       </DialogContent>
     </Dialog>
@@ -147,9 +152,9 @@ function BlogPostDialog({ post, open, onOpenChange }) {
 }
 
 export default function BlogPage() {
-  const [selectedCategory, setSelectedCategory] = useState("All")
+  const [selectedCategory, setSelectedCategory] = useState<Category>("All")
   const [searchQuery, setSearchQuery] = useState("")
-  const [selectedPost, setSelectedPost] = useState(null)
+  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null)
 
   const filteredPosts = blogPosts.filter(post => {
     const matchesCategory = selectedCategory === "All" || post.category === selectedCategory
